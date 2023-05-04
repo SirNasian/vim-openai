@@ -31,7 +31,7 @@ function! openai#ShowMessage(message)
 	call appendbufline(bufnr(bufname), 0, a:message->split("\n"))
 endfunction
 
-function! openai#Adjust(showmessage) range
+function! openai#Adjust(...) range
 	let l:messages = []
 	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
 	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
@@ -43,7 +43,7 @@ function! openai#Adjust(showmessage) range
 	call deletebufline(bufname(), a:firstline, a:lastline)
 	call appendbufline(bufname(), a:firstline-1, l:code->split("\n"))
 
-	if (a:showmessage)
+	if (exists("a:1") && a:1)
 		call openai#ShowMessage(l:response)
 	endif
 endfunction
