@@ -47,3 +47,12 @@ function! openai#Adjust(showmessage) range
 		call openai#ShowMessage(l:response)
 	endif
 endfunction
+
+function! openai#Explain() range
+	let l:messages = []
+	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
+	call add(l:messages, { "role": "system", "content": "Explain the following code" })
+	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
+	let l:response = openai#Request(l:messages)
+	call openai#ShowMessage(l:response)
+endfunction
