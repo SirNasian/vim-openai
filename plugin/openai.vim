@@ -6,6 +6,12 @@ if (!exists("g:openai_chat_model"))
 	let g:openai_chat_model = "gpt-3.5-turbo"
 endif
 
+function! openai#GetCodeSelection(start, end)
+	let lines = getline(a:start, a:end)
+	let lines = join(lines, "\n")
+	return "```\n" . lines . "\n```"
+endfunction
+
 function! openai#Request(messages)
 	let l:command = ["curl", "https://api.openai.com/v1/chat/completions", "-s"]
 	call add(l:command, "-H")->add("Authorization: Bearer " . g:openai_api_key)
@@ -28,7 +34,7 @@ endfunction
 function! openai#Adjust(showmessage) range
 	let l:messages = []
 	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
-	call add(l:messages, { "role": "user",   "content": printf("```\n%s\n```", join(getline(a:firstline, a:lastline), "\n")) })
+	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
 	call add(l:messages, { "role": "user",   "content": input("Instruction: ") })
 
 	let l:response = openai#Request(l:messages)
