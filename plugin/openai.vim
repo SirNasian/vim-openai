@@ -22,11 +22,11 @@ endfunction
 
 function! openai#ShowMessage(message)
 	let bufname = "openai"
-	if (bufwinid(bufname) ==# -1)
+	if (len(win_findbuf(bufnr(bufname))) == 0)
 		execute "bel vs " . bufname
 		set buftype=nofile filetype=markdown wrap
 	endif
-	call win_gotoid(bufwinid(bufname))
+	call win_gotoid(win_findbuf(bufnr(bufname))[0])
 	call deletebufline(bufnr(bufname), 1, "$")
 	call appendbufline(bufnr(bufname), 0, a:message->split("\n"))
 endfunction
