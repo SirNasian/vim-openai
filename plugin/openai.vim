@@ -48,19 +48,19 @@ function! openai#Adjust(...) range
 	endif
 endfunction
 
-function! openai#Explain() range
+function! openai#Explain(...) range
 	let l:messages = []
 	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
-	call add(l:messages, { "role": "user",   "content": "What does the following code do?" })
+	call add(l:messages, { "role": "user",   "content": printf("What does the following %s code do?", exists("a:1") ? a:1 : "") })
 	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
 	let l:response = openai#Request(l:messages)
 	call openai#ShowMessage(l:response)
 endfunction
 
-function! openai#Review() range
+function! openai#Review(...) range
 	let l:messages = []
 	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
-	call add(l:messages, { "role": "user",   "content": "How can the following code be improved?" })
+	call add(l:messages, { "role": "user",   "content": printf("How can the following %s code be improved?", exists("a:1") ? a:1 : "") })
 	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
 	let l:response = openai#Request(l:messages)
 	call openai#ShowMessage(l:response)
