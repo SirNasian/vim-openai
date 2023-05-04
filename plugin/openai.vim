@@ -51,7 +51,7 @@ endfunction
 function! openai#Explain() range
 	let l:messages = []
 	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
-	call add(l:messages, { "role": "system", "content": "Explain the following code" })
+	call add(l:messages, { "role": "user",   "content": "What does the following code do?" })
 	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
 	let l:response = openai#Request(l:messages)
 	call openai#ShowMessage(l:response)
@@ -60,7 +60,7 @@ endfunction
 function! openai#Review() range
 	let l:messages = []
 	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
-	call add(l:messages, { "role": "system", "content": "Review the following code, and make suggestions for optimisations and/or improvements" })
+	call add(l:messages, { "role": "user",   "content": "How can the following code be improved?" })
 	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
 	let l:response = openai#Request(l:messages)
 	call openai#ShowMessage(l:response)
