@@ -65,3 +65,12 @@ function! openai#Review(...) range
 	let l:response = openai#Request(l:messages)
 	call openai#ShowMessage(l:response)
 endfunction
+
+function! openai#Ask() range
+	let l:messages = []
+	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
+	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
+	call add(l:messages, { "role": "user",   "content": input("Query: ") })
+	let l:response = openai#Request(l:messages)
+	call openai#ShowMessage(l:response)
+endfunction
