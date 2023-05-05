@@ -43,7 +43,7 @@ function! openai#Adjust(...) range
 	call deletebufline(bufname(), a:firstline, a:lastline)
 	call appendbufline(bufname(), a:firstline-1, l:code->split("\n"))
 
-	if (exists("a:1") && a:1)
+	if (exists("a:1") && eval(a:1))
 		call openai#ShowMessage(l:response)
 	endif
 endfunction
@@ -74,3 +74,8 @@ function! openai#Ask() range
 	let l:response = openai#Request(l:messages)
 	call openai#ShowMessage(l:response)
 endfunction
+
+command! -range -nargs=? OpenAIAdjust <line1>,<line2>call openai#Adjust(<f-args>)
+command! -range -nargs=? OpenAIExplain <line1>,<line2>call openai#Explain(<f-args>)
+command! -range -nargs=? OpenAIReview <line1>,<line2>call openai#Review(<f-args>)
+command! -range -nargs=? OpenAIAsk <line1>,<line2>call openai#Ask(<f-args>)
