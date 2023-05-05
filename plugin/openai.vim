@@ -32,10 +32,15 @@ function! openai#ShowMessage(message)
 endfunction
 
 function! openai#Adjust(...) range
+	let l:input = input("Instruction: ")
+	if (empty(l:input))
+		return
+	endif
+
 	let l:messages = []
 	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
 	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
-	call add(l:messages, { "role": "user",   "content": input("Instruction: ") })
+	call add(l:messages, { "role": "user",   "content": l:input })
 
 	let l:response = openai#Request(l:messages)
 	let l:code = substitute(l:response, "^.*```\\w*\\(.*\\)```.*$", "\\1", "")
@@ -67,10 +72,16 @@ function! openai#Review(...) range
 endfunction
 
 function! openai#Ask() range
+	let l:input = input("Query: ")
+	if (empty(l:input))
+		return
+	endif
+
 	let l:messages = []
 	call add(l:messages, { "role": "system", "content": "You are a software development programming assistant" })
 	call add(l:messages, { "role": "user",   "content": openai#GetCodeSelection(a:firstline, a:lastline) })
-	call add(l:messages, { "role": "user",   "content": input("Query: ") })
+	call add(l:messages, { "role": "user",   "content": l:input })
+
 	let l:response = openai#Request(l:messages)
 	call openai#ShowMessage(l:response)
 endfunction
